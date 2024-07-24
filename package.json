@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/pradeepkmaran/rest-api/issues"
   },
-  "homepage": "https://github.com/pradeepkmaran/rest-api#readme"
+  "homepage": "https://github.com/pradeepkmaran/rest-api#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
 }
