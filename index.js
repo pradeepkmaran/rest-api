@@ -4,7 +4,7 @@ const PORT = 8000;
 const users = require("./MOCK_DATA.json");
 
 
-app.get("/users", (req, res) => {
+app.get("/users", (req, res) => { // for browsers // SSR
     const html = `
     <ul>
         ${users.map((user)=>`<li>${user.first_name}</li>`).join("")}
@@ -12,5 +12,9 @@ app.get("/users", (req, res) => {
     `;
     res.send(html);
 });
+
+app.get('/api/users', (req, res) => { // for mobile apps or anything // CSR
+    res.send(users);
+})
 
 app.listen(PORT, ()=>console.log(`Listening to port: ${PORT}`));
