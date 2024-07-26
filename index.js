@@ -22,10 +22,10 @@ app.use((req, res, next) => {
 
 // Middleware 3
 app.use((req, res, next) => {
-    var change = 0; // change this to 1 if api call has to be made.
+    var change = 1; // change this to 1 if api call has to be made. 0 to abort.
     fs.appendFile(
         'log.txt', 
-        (change == 1 ? `MidWare2 : ${Date.now()} : ${req.ip}, ${req.path}\n` : `MidWare2 : Abort Call`),
+        (change == 1 ? `MidWare2 : ${Date.now()} : ${req.ip}, ${req.path}\n` : `MidWare2 : Abort Call\n`),
         (err) => {
             if(change) {
                 next();
@@ -50,6 +50,7 @@ app.get("/users", (req, res) => { // for browsers // SSR
 
 app.route('/api/users') // for mobile apps or anything // CSR
     .get((req, res) => { 
+        res.setHeader('X-CreatedBy', `${req.ip}`); // header // explore in google to check inbuilt headers
         return res.send(users);
     })
     .post((req, res) => {

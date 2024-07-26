@@ -2,3 +2,9 @@ MidWare1 : 1721961518452 : ::1, /api/users/1001
 MidWare2 : 1721961518456 : ::1, /api/users/1001
 MidWare1 : 1721961550170 : ::1, /api/users/1001
 MidWare2 : Abort Call
+MidWare1 : 1721962144492 : ::1, /users
+MidWare2 : Abort Call
+MidWare1 : 1721962146975 : ::1, /users
+MidWare2 : Abort Call
+MidWare1 : 1721963511718 : ::1, /api/users
+MidWare2 : 1721963511723 : ::1, /api/users
