@@ -2,8 +2,8 @@ const express = require("express");
 const fs = require("fs");
 const mongoose = require("mongoose");
 
-const users = require("./MOCK_DATA.json");
 const { type } = require("express/lib/response");
+const { timeStamp } = require("console");
 
 const app = express();
 const PORT = 8000;
@@ -33,6 +33,8 @@ const userSchema = mongoose.Schema({
     gender: {
         type: String,
     }
+}, {
+    timestamps: true
 });
 
 const User = mongoose.model("user", userSchema);
@@ -70,10 +72,11 @@ app.use((req, res, next) => {
 
 
 // HYBRID SERVER 
-app.get("/users", (req, res) => { // for browsers // SSR
+app.get("/users", async (req, res) => { // for browsers // SSR
+    const allUsers = await User.find({});
     const html = `
     <ul>
-        ${users.map((user)=>`<li>${user.first_name}</li>`).join("")}
+        ${allUsers.map((user)=>`<li>${user.firstName} - ${user.email}</li>`).join("")}
     </ul>
     `;
     return res.send(html);
@@ -81,9 +84,10 @@ app.get("/users", (req, res) => { // for browsers // SSR
 
 
 app.route('/api/users') // for mobile apps or anything // CSR
-    .get((req, res) => { 
+    .get(async (req, res) => { 
+        const allUsers = await User.find({});
         res.setHeader('X-CreatedBy', `${req.ip}`); // header // explore in google to check inbuilt headers
-        return res.send(users);
+        return res.json(allUsers);
     })
     .post(async (req, res) => {
         const body = req.body;
@@ -102,19 +106,18 @@ app.route('/api/users') // for mobile apps or anything // CSR
     });
 
 app.route('/api/users/:id') // for mobile apps or anything // CSR
-    .get((req, res) => {
-        const id = Number(req.params.id);
-        const user = users.find((user) => user.id === id);
+    .get(async (req, res) => {
+        const user = await User.findById(req.params.id);
         if(!user) return res.status(404).json({msg: "User not found."});
         return res.json(user);
     })
-    .patch((req, res) => {
-        // Update user with ID = id
-        return res.json({status: 'Pending'});
+    .patch(async (req, res) => {
+        await User.findByIdAndUpdate(req.params.id, {lastName: req.body.last_name});
+        return res.json({status: 'Updated'});
     })
-    .delete((req, res) => {
-        // Delete user with ID = id
-        return res.json({status: 'Pending'});
+    .delete(async (req, res) => {
+        await User.findByIdAndDelete(req.params.id);
+        return res.json({status: 'Deleted'});
     });
 
 
